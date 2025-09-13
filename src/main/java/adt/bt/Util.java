@@ -11,8 +11,30 @@ public class Util {
 	 * @return - noh que se tornou a nova raiz
 	 */
 	public static <T extends Comparable<T>> BSTNode<T> leftRotation(BSTNode<T> node) {
-		//TODO Implemente sua rotacao a esquerda aqui
-		throw new UnsupportedOperationException("Not implemented yet!");
+		BSTNode<T> no = node;
+		if (node != null && !node.isEmpty() && node.right != null && !node.right.isEmpty()) {
+			BSTNode<T> Root = node;
+			BSTNode<T> pivot = (BSTNode<T>)node.right;
+			BSTNode<T> RS = (BSTNode<T>)pivot.left;
+
+			Root.right = pivot.left;
+			if (RS != null) {
+				RS.setParent(Root);
+			}
+			pivot.left = Root;
+
+			pivot.setParent(node.parent);
+			if (node.parent != null) {
+				if (Root.getParent().getLeft().equals(Root)) {
+					Root.getParent().setLeft(pivot);
+				} else {
+					Root.getParent().setRight(pivot);
+				}
+			}
+			Root.setParent(pivot);
+			no = pivot;
+		}
+		return no;
 	}
 
 	/**

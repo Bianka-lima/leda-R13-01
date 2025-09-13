@@ -2,6 +2,7 @@ package adt.avltree;
 
 import adt.bst.BSTImpl;
 import adt.bst.BSTNode;
+import adt.bt.Util;
 
 /**
  * 
@@ -28,14 +29,41 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements
 
 	// AUXILIARY
 	protected int calculateBalance(BSTNode<T> node) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		int balance = 0;
+		if (node != null && !node.isEmpty()) {
+			balance = recursiveHeight((BSTNode<T>)node.getLeft()) - recursiveHeight((BSTNode<T>)node.getRight());
+		}
+		return balance;
 	}
 
 	// AUXILIARY
 	protected void rebalance(BSTNode<T> node) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		if (node != null && !node.isEmpty()) {
+
+			int balance = calculateBalance(node);
+			if (Math.abs(balance) > 1) {
+				
+				if (balance > 1) {
+					if (calculateBalance((BSTNode<T>)node.getLeft()) >= 0) {
+						node = Util.rightRotation(node);
+					} else {
+						node.setLeft(Util.leftRotation((BSTNode<T>)node.getLeft()));
+						node = Util.rightRotation(node);
+					}
+				
+				} else if (balance < -1) {
+					if (calculateBalance((BSTNode<T>)node.getRight()) <= 0) {
+						node = Util.leftRotation(node);
+					} else {
+						node.setRight(Util.rightRotation((BSTNode<T>)node.getRight()));
+						node = Util.leftRotation(node);
+					}
+				}
+				if (node.getParent() == null) {
+					this.root = node;
+				}
+			} 
+		}
 	}
 
 	// AUXILIARY
