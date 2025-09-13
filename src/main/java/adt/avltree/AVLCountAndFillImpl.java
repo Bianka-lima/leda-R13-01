@@ -1,5 +1,7 @@
 package adt.avltree;
 
+import adt.bst.BSTNode;
+
 public class AVLCountAndFillImpl<T extends Comparable<T>> extends
 		AVLTreeImpl<T> implements AVLCountAndFill<T> {
 
@@ -32,10 +34,37 @@ public class AVLCountAndFillImpl<T extends Comparable<T>> extends
 		return RLcounter;
 	}
 
+
 	@Override
 	public void fillWithoutRebalance(T[] array) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+
+		if (array != null) {
+			for (int i = 0; i < array.length; i++) {
+				insertion(array[i]);
+			}
+		}
+	}
+
+	public void insertion(T element) {
+ 		if (element != null) {
+			recursiveInsert(this.root, element);
+		}
+	}
+
+	private void recursiveInsert(BSTNode<T> node, T element) {
+		if (node.isEmpty()) {
+			node.setData(element);
+			node.setLeft(new BSTNode<T>());
+			node.setRight(new BSTNode<T>());
+			((BSTNode<T>) node.getLeft()).setParent(node);
+			((BSTNode<T>) node.getRight()).setParent(node);
+		} else {
+			if (element.compareTo(node.getData()) > 0) {
+				recursiveInsert((BSTNode<T>)node.getRight(), element);
+			} else {
+				recursiveInsert((BSTNode<T>)node.getLeft(), element);
+			}
+		}
 	}
 
 }
