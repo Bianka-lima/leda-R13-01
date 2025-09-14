@@ -1,6 +1,7 @@
 package adt.avltree;
 
 import adt.bst.BSTNode;
+import adt.bt.Util;
 
 public class AVLCountAndFillImpl<T extends Comparable<T>> extends
 		AVLTreeImpl<T> implements AVLCountAndFill<T> {
@@ -64,6 +65,40 @@ public class AVLCountAndFillImpl<T extends Comparable<T>> extends
 			} else {
 				recursiveInsert((BSTNode<T>)node.getLeft(), element);
 			}
+		}
+	}
+
+	@Override
+	protected void rebalance(BSTNode<T> node) {
+		if (node != null && !node.isEmpty()) {
+
+			int balance = calculateBalance(node);
+			if (Math.abs(balance) > 1) {
+				
+				if (balance > 1) {
+					if (calculateBalance((BSTNode<T>)node.getLeft()) >= 0) {
+						node = Util.rightRotation(node);
+						LLcounter++;
+					} else {
+						node.setLeft(Util.leftRotation((BSTNode<T>)node.getLeft()));
+						node = Util.rightRotation(node);
+						LRcounter++;
+					}
+				
+				} else if (balance < -1) {
+					if (calculateBalance((BSTNode<T>)node.getRight()) <= 0) {
+						node = Util.leftRotation(node);
+						RRcounter++;
+					} else {
+						node.setRight(Util.rightRotation((BSTNode<T>)node.getRight()));
+						node = Util.leftRotation(node);
+						RLcounter++;
+					}
+				}
+				if (node.getParent() == null) {
+					this.root = node;
+				}
+			} 
 		}
 	}
 
